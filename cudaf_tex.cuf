@@ -1,0 +1,41 @@
+module tex
+    real(8), texture, pointer :: t_d_a(:)
+    contains
+
+    attributes(global) subroutine tex_kernel(a)
+      real(8), device :: a(*)
+      i = blockDim%x*(blockIdx%x-1) + threadIdx%x
+      a(i) = t_d_a(i)
+    return
+    end subroutine
+
+    attributes(global) subroutine global_kernel(a)
+      real(8), device :: a(*)
+      i = blockDim%x*(blockIdx%x-1) + threadIdx%x
+      a(i) = a(i)
+    return
+    end subroutine
+
+end module tex
+
+program main
+    use cudafor
+    use tex
+    implicit none
+
+    real(8) h_a(10)
+    real(8), target, device :: d_a(10)
+
+    d_a(:) = 15.4275d0
+
+    t_d_a => d_a
+
+    call global_kernel<<<1,10>>>(d_a)
+    h_a = d_a
+    print *, 'global values: ', h_a
+
+    call tex_kernel<<<1,10>>>(d_a)
+    h_a = d_a
+    print *, 'texture values: ', h_a
+
+end program main
