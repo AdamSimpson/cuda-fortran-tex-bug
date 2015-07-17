@@ -1,5 +1,5 @@
 This example sets values of a device array to 15.4275d0, associates a texture pointer to the device array, and then launches a kernel to copy the values from texture memory to the original array.
-
+```
 $ pgfortran cudaf_tex.cuf
 $ ./a.out
  
@@ -11,4 +11,4 @@ $ ./a.out
     15.42749786376953         15.42749786376953         15.42749786376953      
     15.42749786376953         15.42749786376953         15.42749786376953      
     15.42749786376953         0.000000000000000     
-
+```
